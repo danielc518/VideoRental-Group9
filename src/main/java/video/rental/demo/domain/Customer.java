@@ -19,14 +19,17 @@ public class Customer {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Rental> rentals = new ArrayList<Rental>();
+	
+	private ICustomerReportStrategy reportStrategy;
 
 	public Customer() {	// for hibernate
 	}
 
-	public Customer(int code, String name, LocalDate dateOfBirth) {
+	public Customer(int code, String name, LocalDate dateOfBirth, ICustomerReportStrategy report) {
 		this.code = code;
 		this.name = name;
 		this.dateOfBirth = dateOfBirth;
+		this.reportStrategy = report;
 	}
 
 	public int getCode() {
@@ -71,6 +74,10 @@ public class Customer {
 		}
 		
 		return totalPoints;
+	}
+	
+	public String getReport() {
+		return reportStrategy.getReport(this);
 	}
 	
 }

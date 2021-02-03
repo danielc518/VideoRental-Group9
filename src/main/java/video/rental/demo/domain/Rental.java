@@ -43,7 +43,7 @@ public class Rental {
 			points++;
 
 		if (getDaysRented() > getDaysRentedLimit())
-			points -= Math.min(points, getVideo().getLateReturnPointPenalty());
+			points -= Math.min(points, video.getLateReturnPointPenalty());
 		
 		return points;
 	}

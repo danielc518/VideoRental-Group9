@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import video.rental.demo.domain.Customer;
+import video.rental.demo.domain.PlainReportStrategy;
 import video.rental.demo.domain.Rating;
 import video.rental.demo.domain.Rental;
 import video.rental.demo.domain.Repository;
@@ -18,9 +19,9 @@ public class SampleGenerator {
 	}
 
 	public void generateSamples() {
-		Customer james = new Customer(0, "James", LocalDate.parse("1975-05-15"));
-		Customer brown = new Customer(1, "Brown", LocalDate.parse("2002-03-17"));
-        Customer shawn = new Customer(2, "Shawn", LocalDate.parse("2010-11-11"));
+		Customer james = new Customer(0, "James", LocalDate.parse("1975-05-15"), new PlainReportStrategy());
+		Customer brown = new Customer(1, "Brown", LocalDate.parse("2002-03-17"), new PlainReportStrategy());
+        Customer shawn = new Customer(2, "Shawn", LocalDate.parse("2010-11-11"), new PlainReportStrategy());
 		repository.saveCustomer(james);
 		repository.saveCustomer(brown);
 		repository.saveCustomer(shawn);
