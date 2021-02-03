@@ -22,6 +22,8 @@ public class Rental {
 
 	@OneToOne(fetch = FetchType.EAGER)
 	private Video video;
+	
+	private AbstractPointPolicy pointPolicy;
 
 	Rental() {
 	}
@@ -30,6 +32,7 @@ public class Rental {
 		this.video = video;
 		this.status = 0;
 		this.rentDate = LocalDateTime.now();
+		this.pointPolicy = new GeneralPointPolicy(); // Temporary
 	}
 	
 	public double getCharge() {
@@ -37,15 +40,7 @@ public class Rental {
 	}
 	
 	public int getPoints() {
-		int points = 1;
-		
-		if ((video.getPriceCode() == Video.NEW_RELEASE))
-			points++;
-
-		if (getDaysRented() > getDaysRentedLimit())
-			points -= Math.min(points, video.getLateReturnPointPenalty());
-		
-		return points;
+		return pointPolicy.getPoints(this);
 	}
 
 	public Video getVideo() {
