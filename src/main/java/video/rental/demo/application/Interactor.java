@@ -57,8 +57,7 @@ public class Interactor {
 		List<Video> videos = getRepository().findAllVideos();
 
 		for (Video video : videos) {
-			builder.append("Video type: " + video.getVideoType() + "\tPrice code: " + video.getPriceCode()
-					+ "\tRating: " + video.getVideoRating() + "\tTitle: " + video.getTitle() + "\n");
+			video.getVideoDescription(builder);
 		}
 		
 		return builder.toString();

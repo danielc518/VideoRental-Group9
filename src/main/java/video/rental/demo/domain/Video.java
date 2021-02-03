@@ -145,4 +145,9 @@ public class Video {
 			return false;
 		}
 	}
+
+	public void getVideoDescription(StringBuilder builder) {
+		builder.append("Video type: " + videoType + "\tPrice code: " + priceCode
+				+ "\tRating: " + videoRating + "\tTitle: " + title + "\n");
+	}
 }
