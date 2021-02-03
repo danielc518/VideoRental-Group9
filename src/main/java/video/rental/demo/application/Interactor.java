@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import video.rental.demo.domain.Customer;
+import video.rental.demo.domain.PlainCustomerReport;
 import video.rental.demo.domain.Rating;
 import video.rental.demo.domain.Rental;
 import video.rental.demo.domain.Repository;
@@ -102,7 +103,8 @@ public class Interactor {
 		if (foundCustomer == null) {
 			sb.append("No customer found\n");
 		} else {
-			String result = foundCustomer.getReport();
+			PlainCustomerReport report = new PlainCustomerReport(foundCustomer);
+			String result = report.getReport();
 			sb.append(result + "\n");
 		}
 		

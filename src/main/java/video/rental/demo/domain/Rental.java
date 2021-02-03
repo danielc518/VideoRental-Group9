@@ -31,6 +31,22 @@ public class Rental {
 		this.status = 0;
 		this.rentDate = LocalDateTime.now();
 	}
+	
+	public double getCharge() {
+		return video.getRentalCharge(getDaysRented());
+	}
+	
+	public int getPoints() {
+		int points = 1;
+		
+		if ((video.getPriceCode() == Video.NEW_RELEASE))
+			points++;
+
+		if (getDaysRented() > getDaysRentedLimit())
+			points -= Math.min(points, getVideo().getLateReturnPointPenalty());
+		
+		return points;
+	}
 
 	public Video getVideo() {
 		return video;

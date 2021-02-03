@@ -30,6 +30,8 @@ public class Video {
 
 	private LocalDate registeredDate;
 	private boolean rented;
+	
+	private IChargePolicy chargePolicy;
 
 	public Video() {
 	} // for hibernate
@@ -41,6 +43,11 @@ public class Video {
 		this.videoRating = videoRating;
 		this.registeredDate = registeredDate;
 		this.rented = false;
+		this.chargePolicy = new RegularChargePolicy(); // Temporary
+	}
+	
+	public double getRentalCharge(int daysRented) {
+		return chargePolicy.getRentalCharge(daysRented);
 	}
 
 	public int getLateReturnPointPenalty() {
