@@ -91,4 +91,8 @@ public class Rental {
 
 	    return days == 0 ? 1 : days + 1;
 	}
+
+	boolean isRentedVideo(String videoTitle) {
+		return video.getTitle().equals(videoTitle) && video.isRented();
+	}
 }

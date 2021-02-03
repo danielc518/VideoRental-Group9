@@ -26,9 +26,9 @@ public class SampleGenerator {
 		repository.saveCustomer(shawn);
 
 		Video v1 = new Video("V1", Video.CD, Video.REGULAR, Rating.FIFTEEN, LocalDate.of(2018, 1, 1));
-		v1.setRented(true);
+		v1.setRented();
 		Video v2 = new Video("V2", Video.DVD, Video.NEW_RELEASE, Rating.TWELVE, LocalDate.of(2018, 3, 1));
-		v2.setRented(true);
+		v2.setRented();
         Video v3 = new Video("V3", Video.VHS, Video.NEW_RELEASE, Rating.EIGHTEEN, LocalDate.of(2018, 3, 1));
 
 		repository.saveVideo(v1);

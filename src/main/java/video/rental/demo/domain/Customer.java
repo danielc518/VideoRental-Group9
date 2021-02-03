@@ -128,4 +128,13 @@ public class Customer {
 		setRentals(new ArrayList<Rental>());
 	}
 
+	public Video returnVideo(String videoTitle) {
+		for (Rental rental : rentals) {
+			if (rental.isRentedVideo(videoTitle)) {
+				return rental.returnVideo();
+			}
+		}
+		return null;
+	}
+
 }

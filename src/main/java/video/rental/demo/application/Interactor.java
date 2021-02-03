@@ -42,17 +42,12 @@ public class Interactor {
 		if (foundCustomer == null)
 			return;
 
-		List<Rental> customerRentals = foundCustomer.getRentals();
+		Video returnedVideo = foundCustomer.returnVideo(videoTitle);
+		if (returnedVideo == null)
+			return;
 
-		for (Rental rental : customerRentals) {
-			if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
-				Video video = rental.returnVideo();
-				video.setRented(false);
-				getRepository().saveVideo(video);
-				break;
-			}
-		}
-
+		returnedVideo.setReturned();
+		getRepository().saveVideo(returnedVideo);
 		getRepository().saveCustomer(foundCustomer);
 	}
 

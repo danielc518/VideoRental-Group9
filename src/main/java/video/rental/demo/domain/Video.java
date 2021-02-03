@@ -79,8 +79,12 @@ public class Video {
 		return rented;
 	}
 
-	public void setRented(boolean rented) {
-		this.rented = rented;
+	public void setRented() {
+		this.rented = true;
+	}
+	
+	public void setReturned() {
+		this.rented = false;
 	}
 
 	public LocalDate getRegisteredDate() {
@@ -93,7 +97,7 @@ public class Video {
 
 	public boolean rentFor(Customer customer) {
 		if (!isUnderAge(customer)) {
-			setRented(true);
+			setRented();
 			Rental rental = new Rental(this);
 			List<Rental> customerRentals = customer.getRentals();
 			customerRentals.add(rental);
