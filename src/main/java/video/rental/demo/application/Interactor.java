@@ -88,26 +88,22 @@ public class Interactor {
 		}
 	}
 
-	public void rentVideo(int code, String videoTitle) {
-		Customer foundCustomer = getRepository().findCustomerById(code);
-
+	public void rentVideo(int customerId, String videoTitle) {
+		Customer foundCustomer = getRepository().findCustomerById(customerId);
 		if (foundCustomer == null)
 			return;
-		Video foundVideo = getRepository().findVideoByTitle(videoTitle);
 
+		Video foundVideo = getRepository().findVideoByTitle(videoTitle);
 		if (foundVideo == null)
 			return;
 
-		if (foundVideo.isRented() == true)
+		if (foundVideo.isRentable(foundCustomer) == false)
 			return;
-
-		Boolean status = foundVideo.rentFor(foundCustomer);
-		if (status == true) {
-			getRepository().saveVideo(foundVideo);
-			getRepository().saveCustomer(foundCustomer);
-		} else {
-			return;
-		}
+		
+		foundCustomer.addRental(foundVideo);
+			
+		getRepository().saveVideo(foundVideo);
+		getRepository().saveCustomer(foundCustomer);
 	}
 
 	public void registerCustomer(String name, int code, String dateOfBirth) {

@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -95,19 +94,6 @@ public class Video {
 		return videoType;
 	}
 
-	public boolean rentFor(Customer customer) {
-		if (!isUnderAge(customer)) {
-			setRented();
-			Rental rental = new Rental(this);
-			List<Rental> customerRentals = customer.getRentals();
-			customerRentals.add(rental);
-			customer.setRentals(customerRentals);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public boolean isUnderAge(Customer customer) {
 		// calculate customer's age in years and months
 
@@ -149,5 +135,9 @@ public class Video {
 	public void getVideoDescription(StringBuilder builder) {
 		builder.append("Video type: " + videoType + "\tPrice code: " + priceCode
 				+ "\tRating: " + videoRating + "\tTitle: " + title + "\n");
+	}
+
+	public boolean isRentable(Customer customer) {
+		return isRented() == false && !isUnderAge(customer);
 	}
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Repository {
 
-	Customer findCustomerById(int code);
+	Customer findCustomerById(int customerId);
 
 	Video findVideoByTitle(String title);
 

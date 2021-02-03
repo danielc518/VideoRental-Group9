@@ -137,4 +137,8 @@ public class Customer {
 		return null;
 	}
 
+	public void addRental(Video video) {
+		video.setRented();
+		rentals.add(new Rental(video));
+	}
 }
