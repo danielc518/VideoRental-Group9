@@ -115,4 +115,18 @@ public class Customer {
 		return result;
 	}
 
+	public void getRentalsDescription(StringBuilder builder) {
+		builder.append("Id: " + getCode() + "\nName: " + getName() + "\tRentals: "
+				+ getRentals().size() + "\n");
+		for (Rental rental : getRentals()) {
+			builder.append("\tTitle: " + rental.getVideo().getTitle() + " ");
+			builder.append("\tPrice Code: " + rental.getVideo().getPriceCode());
+		}
+	}
+
+	public void clearRentals() {
+		List<Rental> rentals = new ArrayList<Rental>();
+		setRentals(rentals);
+	}
+
 }

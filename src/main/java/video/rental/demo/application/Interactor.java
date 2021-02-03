@@ -1,7 +1,6 @@
 package video.rental.demo.application;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import video.rental.demo.domain.Customer;
@@ -23,23 +22,17 @@ public class Interactor {
 	public String clearRentals(int customerCode) {
 		StringBuilder builder = new StringBuilder();
 
-		Customer foundCustomer = getRepository().findCustomerById(customerCode);
+		Customer foundCustomer = repository.findCustomerById(customerCode);
 
 		if (foundCustomer == null) {
 			builder.append("No customer found\n");
-		} else {
-			builder.append("Id: " + foundCustomer.getCode() + "\nName: " + foundCustomer.getName() + "\tRentals: "
-					+ foundCustomer.getRentals().size() + "\n");
-			for (Rental rental : foundCustomer.getRentals()) {
-				builder.append("\tTitle: " + rental.getVideo().getTitle() + " ");
-				builder.append("\tPrice Code: " + rental.getVideo().getPriceCode());
-			}
+			return builder.toString();
+		} 
 
-			List<Rental> rentals = new ArrayList<Rental>();
-			foundCustomer.setRentals(rentals);
+		foundCustomer.getRentalsDescription(builder);
+		foundCustomer.clearRentals();
 
-			getRepository().saveCustomer(foundCustomer);
-		}
+		repository.saveCustomer(foundCustomer);
 
 		return builder.toString();
 	}
