@@ -76,29 +76,37 @@ public class Interactor {
 		return builder.toString();
 	}
 
-	public void listCustomers() {
+	public String listCustomers() {
+		StringBuilder sb = new StringBuilder();
+		
 		List<Customer> customers = getRepository().findAllCustomers();
 
 		for (Customer customer : customers) {
-			System.out.println("ID: " + customer.getCode() + "\nName: " + customer.getName() + "\tRentals: "
-					+ customer.getRentals().size());
+			sb.append("ID: " + customer.getCode() + "\nName: " + customer.getName() + "\tRentals: "
+					+ customer.getRentals().size() + "\n");
 			for (Rental rental : customer.getRentals()) {
-				System.out.print("\tTitle: " + rental.getVideo().getTitle() + " ");
-				System.out.print("\tPrice Code: " + rental.getVideo().getPriceCode());
-				System.out.println("\tReturn Status: " + rental.getStatus());
+				sb.append("\tTitle: " + rental.getVideo().getTitle() + " ");
+				sb.append("\tPrice Code: " + rental.getVideo().getPriceCode());
+				sb.append("\tReturn Status: " + rental.getStatus() + "\n");
 			}
 		}
+		
+		return sb.toString();
 	}
 
-	public void getCustomerReport(int code) {
+	public String getCustomerReport(int code) {
 		Customer foundCustomer = getRepository().findCustomerById(code);
+		
+		StringBuilder sb = new StringBuilder();
 
 		if (foundCustomer == null) {
-			System.out.println("No customer found");
+			sb.append("No customer found\n");
 		} else {
 			String result = foundCustomer.getReport();
-			System.out.println(result);
+			sb.append(result + "\n");
 		}
+		
+		return sb.toString();
 	}
 
 	public void rentVideo(int code, String videoTitle) {

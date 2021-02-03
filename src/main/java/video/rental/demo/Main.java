@@ -1,13 +1,12 @@
 package video.rental.demo;
 
-import video.rental.demo.presentation.CmdUI;
+import video.rental.demo.presentation.GraphicUI;
 
 public class Main {
-	private static CmdUI ui;
+	private static GraphicUI ui;
 
 	public static void main(String[] args) {
-//		Repository repository = new RepositoryMemImpl();
-//		ui = new CmdUI(repository);
-//		ui.start();
+		ui = new GraphicUI();
+		ui.start();
 	}
 }
