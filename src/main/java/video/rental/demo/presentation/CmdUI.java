@@ -1,6 +1,8 @@
-package video.rental.demo;
+package video.rental.demo.presentation;
 
 import java.util.Scanner;
+
+import video.rental.demo.application.Interactor;
 
 public class CmdUI {
 	private static Scanner scanner = new Scanner(System.in);
@@ -55,7 +57,7 @@ public class CmdUI {
 		System.out.println("Enter customer code: ");
 		int customerCode = scanner.nextInt();
 
-		interactor.clearRentals(customerCode);
+		System.out.print(interactor.clearRentals(customerCode));
 	}
 
 	public void returnVideo() {
@@ -71,7 +73,7 @@ public class CmdUI {
 	public void listVideos() {
 		System.out.println("List of videos");
 
-		interactor.listVideos();
+		System.out.print(interactor.listVideos());
 		
 		System.out.println("End of list");
 	}
