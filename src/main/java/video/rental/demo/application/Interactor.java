@@ -4,44 +4,34 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import video.rental.demo.domain.Customer;
-import video.rental.demo.domain.Rating;
-import video.rental.demo.domain.Rental;
-import video.rental.demo.domain.Repository;
-import video.rental.demo.domain.Video;
+import video.rental.demo.domain.*;
 import video.rental.demo.presentation.CmdUI;
+import video.rental.demo.utils.Constants;
 
 public class Interactor {
 
 	private Repository repository;
+	private Sentence sentence;
 
-	public Interactor(Repository repository) {
+	public Interactor(Repository repository, Sentence sentence) {
 		super();
 		this.repository = repository;
+		this.sentence = sentence;
 	}
 
 	public String clearRentals(int customerCode) {
-		StringBuilder builder = new StringBuilder();
-
 		Customer foundCustomer = getRepository().findCustomerById(customerCode);
 
-		if (foundCustomer == null) {
-			builder.append("No customer found\n");
-		} else {
-			builder.append("Id: " + foundCustomer.getCode() + "\nName: " + foundCustomer.getName() + "\tRentals: "
-					+ foundCustomer.getRentals().size() + "\n");
-			for (Rental rental : foundCustomer.getRentals()) {
-				builder.append("\tTitle: " + rental.getVideo().getTitle() + " ");
-				builder.append("\tPrice Code: " + rental.getVideo().getPriceCode());
-			}
+		String sentenceForClearRentals = getSentence().makeSentenceForClearRentals(foundCustomer);
 
+		if (foundCustomer != null) {
 			List<Rental> rentals = new ArrayList<Rental>();
 			foundCustomer.setRentals(rentals);
 
 			getRepository().saveCustomer(foundCustomer);
 		}
 
-		return builder.toString();
+		return sentenceForClearRentals;
 	}
 
 	public void returnVideo(int customerCode, String videoTitle) {
@@ -100,7 +90,7 @@ public class Interactor {
 		StringBuilder sb = new StringBuilder();
 
 		if (foundCustomer == null) {
-			sb.append("No customer found\n");
+			sb.append(Constants.NO_CUSTOMER_FOUND).append("\n");
 		} else {
 			String result = foundCustomer.getReport();
 			sb.append(result + "\n");
@@ -175,4 +165,7 @@ public class Interactor {
 		return repository;
 	}
 
+	private Sentence getSentence() {
+		return sentence;
+	}
 }

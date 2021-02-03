@@ -13,6 +13,7 @@ import javax.swing.SpinnerListModel;
 
 import video.rental.demo.application.Interactor;
 import video.rental.demo.domain.Repository;
+import video.rental.demo.domain.Sentence;
 import video.rental.demo.infrastructure.RepositoryMemImpl;
 
 import javax.swing.JSpinner;
@@ -56,8 +57,9 @@ public class GraphicUI extends JFrame {
 		initialize();
 		
 		Repository repository = new RepositoryMemImpl();
+		Sentence sentence = new PlainSentenceImpl();
 		
-		interactor = new Interactor(repository);
+		interactor = new Interactor(repository, sentence);
 	}
 
 	/**
