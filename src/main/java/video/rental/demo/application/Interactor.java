@@ -8,7 +8,6 @@ import video.rental.demo.domain.Rating;
 import video.rental.demo.domain.Rental;
 import video.rental.demo.domain.Repository;
 import video.rental.demo.domain.Video;
-import video.rental.demo.presentation.CmdUI;
 
 public class Interactor {
 
@@ -97,7 +96,7 @@ public class Interactor {
 		if (foundVideo == null)
 			return;
 
-		if (foundVideo.isRentable(foundCustomer) == false)
+		if (!foundVideo.isRentable(foundCustomer))
 			return;
 		
 		foundCustomer.addRental(foundVideo);
@@ -107,30 +106,10 @@ public class Interactor {
 	}
 
 	public void registerCustomer(String name, int code, String dateOfBirth) {
-		Customer customer = new Customer(code, name, LocalDate.parse(dateOfBirth));
-		getRepository().saveCustomer(customer);
-	}
-
-	public void registerVideo(CmdUI cmdUI, String title, int videoType, int priceCode, int videoRating,
-			LocalDate registeredDate) {
-		Rating rating;
-		if (videoRating == 1)
-			rating = Rating.TWELVE;
-		else if (videoRating == 2)
-			rating = Rating.FIFTEEN;
-		else if (videoRating == 3)
-			rating = Rating.EIGHTEEN;
-		else
-			throw new IllegalArgumentException("No such rating " + videoRating);
-
-		Video video = new Video(title, videoType, priceCode, rating, registeredDate);
-
-		getRepository().saveVideo(video);
+		getRepository().saveCustomer(new Customer(code, name, LocalDate.parse(dateOfBirth)));
 	}
 
 	public void registerVideo(String title, int videoType, int priceCode, int videoRating) {
-		LocalDate registeredDate = LocalDate.now();
-
 		Rating rating;
 		if (videoRating == 1)
 			rating = Rating.TWELVE;
@@ -140,10 +119,9 @@ public class Interactor {
 			rating = Rating.EIGHTEEN;
 		else
 			throw new IllegalArgumentException("No such rating " + videoRating);
+		LocalDate registeredDate = LocalDate.now();
 
-		Video video = new Video(title, videoType, priceCode, rating, registeredDate);
-
-		getRepository().saveVideo(video);
+		getRepository().saveVideo(new Video(title, videoType, priceCode, rating, registeredDate));
 	}
 
 	private Repository getRepository() {

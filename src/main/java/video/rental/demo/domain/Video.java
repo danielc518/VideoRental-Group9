@@ -119,17 +119,7 @@ public class Video {
 		}
 		int age = ageYr;
 
-		// determine if customer is under legal age for rating
-		switch (videoRating) {
-		case TWELVE:
-			return age < 12;
-		case FIFTEEN:
-			return age < 15;
-		case EIGHTEEN:
-			return age < 18;
-		default:
-			return false;
-		}
+		return videoRating.test(age);
 	}
 
 	public void getVideoDescription(StringBuilder builder) {
