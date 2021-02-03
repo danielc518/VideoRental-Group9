@@ -137,8 +137,12 @@ public class Customer {
 		return null;
 	}
 
-	public void addRental(Video video) {
+	public boolean addRental(Video video) {
+		if (!video.isRentable(this))
+			return false;
+		
 		video.setRented();
 		rentals.add(new Rental(video));
+		return true;
 	}
 }

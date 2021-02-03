@@ -8,6 +8,7 @@ import video.rental.demo.domain.Rating;
 import video.rental.demo.domain.Rental;
 import video.rental.demo.domain.Repository;
 import video.rental.demo.domain.Video;
+import video.rental.demo.domain.VideoType;
 
 public class Interactor {
 
@@ -95,14 +96,11 @@ public class Interactor {
 		Video foundVideo = getRepository().findVideoByTitle(videoTitle);
 		if (foundVideo == null)
 			return;
-
-		if (!foundVideo.isRentable(foundCustomer))
-			return;
 		
-		foundCustomer.addRental(foundVideo);
-			
-		getRepository().saveVideo(foundVideo);
-		getRepository().saveCustomer(foundCustomer);
+		if (foundCustomer.addRental(foundVideo)) {
+			getRepository().saveVideo(foundVideo);
+			getRepository().saveCustomer(foundCustomer);
+		}
 	}
 
 	public void registerCustomer(String name, int code, String dateOfBirth) {
@@ -110,6 +108,27 @@ public class Interactor {
 	}
 
 	public void registerVideo(String title, int videoType, int priceCode, int videoRating) {
+		getRepository().saveVideo(new Video(title, 
+				decideVideoType(videoType), 
+				priceCode, 
+				decideVideoRating(videoRating), 
+				LocalDate.now()));
+	}
+
+	private VideoType decideVideoType(int videoType) {
+		VideoType type;
+		if (videoType == 1)
+			type = VideoType.VHS;
+		else if (videoType == 2)
+			type = VideoType.CD;
+		else if (videoType == 3)
+			type = VideoType.DVD;
+		else
+			throw new IllegalArgumentException("No such type" + videoType);
+		return type;
+	}
+
+	private Rating decideVideoRating(int videoRating) {
 		Rating rating;
 		if (videoRating == 1)
 			rating = Rating.TWELVE;
@@ -119,9 +138,7 @@ public class Interactor {
 			rating = Rating.EIGHTEEN;
 		else
 			throw new IllegalArgumentException("No such rating " + videoRating);
-		LocalDate registeredDate = LocalDate.now();
-
-		getRepository().saveVideo(new Video(title, videoType, priceCode, rating, registeredDate));
+		return rating;
 	}
 
 	private Repository getRepository() {

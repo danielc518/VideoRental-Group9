@@ -22,10 +22,7 @@ public class Video {
 	public static final int NEW_RELEASE = 2;
 	public static final int CHILDREN = 3;
 
-	private int videoType;
-	public static final int VHS = 1;
-	public static final int CD = 2;
-	public static final int DVD = 3;
+	private VideoType videoType;
 
 	private LocalDate registeredDate;
 	private boolean rented;
@@ -33,7 +30,7 @@ public class Video {
 	public Video() {
 	} // for hibernate
 
-	public Video(String title, int videoType, int priceCode, Rating videoRating, LocalDate registeredDate) {
+	public Video(String title, VideoType videoType, int priceCode, Rating videoRating, LocalDate registeredDate) {
 		this.title = title;
 		this.videoType = videoType;
 		this.priceCode = priceCode;
@@ -43,19 +40,7 @@ public class Video {
 	}
 
 	public int getLateReturnPointPenalty() {
-		int pentalty = 0;
-		switch (videoType) {
-		case VHS:
-			pentalty = 1;
-			break;
-		case CD:
-			pentalty = 2;
-			break;
-		case DVD:
-			pentalty = 3;
-			break;
-		}
-		return pentalty;
+		return videoType.getLateReturnPointPenalty();
 	}
 
 	public int getPriceCode() {
@@ -90,7 +75,7 @@ public class Video {
 		return registeredDate;
 	}
 
-	public int getVideoType() {
+	public VideoType getVideoType() {
 		return videoType;
 	}
 
@@ -123,7 +108,7 @@ public class Video {
 	}
 
 	public void getVideoDescription(StringBuilder builder) {
-		builder.append("Video type: " + videoType + "\tPrice code: " + priceCode
+		builder.append("Video type: " + videoType.getVideoTypeDescription() + "\tPrice code: " + priceCode
 				+ "\tRating: " + videoRating + "\tTitle: " + title + "\n");
 	}
 
