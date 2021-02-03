@@ -41,8 +41,9 @@ public class GoldenMaster {
 		ByteArrayOutputStream ostream = redirectOutput();
 		
 		Repository repository = new RepositoryMemImpl();
+		Interactor interactor = new Interactor(repository);
 		new SampleGenerator(repository).generateSamples();
-		ui = new CmdUI(repository);
+		ui = new CmdUI(interactor);
 		ui.start();
 		
 		return ostream.toString();

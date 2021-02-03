@@ -1,18 +1,15 @@
 package video.rental.demo;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class CmdUI {
 	private static Scanner scanner = new Scanner(System.in);
 
-	private Repository repository;
+	private Interactor interactor;
 	
-	public CmdUI(Repository repository) {
+	public CmdUI(Interactor interactor) {
 		super();
-		this.repository = repository;
+		this.interactor = interactor;
 	}
 
 	public void start() {
@@ -58,80 +55,32 @@ public class CmdUI {
 		System.out.println("Enter customer code: ");
 		int customerCode = scanner.nextInt();
 
-		Customer foundCustomer = repository.findCustomerById(customerCode);
-
-		if (foundCustomer == null) {
-			System.out.println("No customer found");
-		} else {
-			System.out.println("Id: " + foundCustomer.getCode() + "\nName: " + foundCustomer.getName() + "\tRentals: "
-					+ foundCustomer.getRentals().size());
-			for (Rental rental : foundCustomer.getRentals()) {
-				System.out.print("\tTitle: " + rental.getVideo().getTitle() + " ");
-				System.out.print("\tPrice Code: " + rental.getVideo().getPriceCode());
-			}
-
-			List<Rental> rentals = new ArrayList<Rental>();
-			foundCustomer.setRentals(rentals);
-
-			repository.saveCustomer(foundCustomer);
-		}
+		interactor.clearRentals(customerCode);
 	}
 
 	public void returnVideo() {
 		System.out.println("Enter customer code: ");
 		int customerCode = scanner.nextInt();
 
-		Customer foundCustomer = repository.findCustomerById(customerCode);
-		if (foundCustomer == null)
-			return;
-
 		System.out.println("Enter video title to return: ");
 		String videoTitle = scanner.next();
-
-		List<Rental> customerRentals = foundCustomer.getRentals();
-
-		for (Rental rental : customerRentals) {
-			if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
-				Video video = rental.returnVideo();
-				video.setRented(false);
-				repository.saveVideo(video);
-				break;
-			}
-		}
-
-		repository.saveCustomer(foundCustomer);
+		
+		interactor.returnVideo(customerCode, videoTitle);
 	}
 
 	public void listVideos() {
 		System.out.println("List of videos");
 
-		List<Video> videos = repository.findAllVideos();
-
-		for (Video video : videos) {
-			System.out.println(
-					"Video type: " + video.getVideoType() + 
-					"\tPrice code: " + video.getPriceCode() + 
-					"\tRating: " + video.getVideoRating() +
-					"\tTitle: " + video.getTitle()
-					); 
-		}
+		interactor.listVideos();
+		
 		System.out.println("End of list");
 	}
 
 	public void listCustomers() {
 		System.out.println("List of customers");
 
-		List<Customer> customers = repository.findAllCustomers();
-
-		for (Customer customer : customers) {
-			System.out.println("ID: " + customer.getCode() + "\nName: " + customer.getName() + "\tRentals: "
-					+ customer.getRentals().size());
-			for (Rental rental : customer.getRentals()) {
-				System.out.print("\tTitle: " + rental.getVideo().getTitle() + " ");
-				System.out.print("\tPrice Code: " + rental.getVideo().getPriceCode());
-				System.out.println("\tReturn Status: " + rental.getStatus());
-			}
-		}
+		interactor.listCustomers();
+		
 		System.out.println("End of list");
 	}
 
@@ -139,44 +88,20 @@ public class CmdUI {
 		System.out.println("Enter customer code: ");
 		int code = scanner.nextInt();
 
-		Customer foundCustomer = repository.findCustomerById(code);
-
-		if (foundCustomer == null) {
-			System.out.println("No customer found");
-		} else {
-			String result = foundCustomer.getReport();
-			System.out.println(result);
-		}
+		interactor.getCustomerReport(code);
 	}
 
 	public void rentVideo() {
 		System.out.println("Enter customer code: ");
 		int code = scanner.nextInt();
 
-		Customer foundCustomer = repository.findCustomerById(code);
-		if (foundCustomer == null)
-			return;
-
 		System.out.println("Enter video title to rent: ");
 		String videoTitle = scanner.next();
 
-		Video foundVideo = repository.findVideoByTitle(videoTitle);
-
-		if (foundVideo == null)
-			return;
-
-		if (foundVideo.isRented() == true)
-			return;
-
-		Boolean status = foundVideo.rentFor(foundCustomer);
-		if (status == true) {
-			repository.saveVideo(foundVideo);
-			repository.saveCustomer(foundCustomer);
-		} else {
-			return;
-		}
+		interactor.rentVideo(code, videoTitle);
 	}
 
+	// Control Coupling
 	public void register(String object) {
 		if (object.equals("customer")) {
 			System.out.println("Enter customer name: ");
@@ -188,8 +113,7 @@ public class CmdUI {
 			System.out.println("Enter customer birthday: ");
 			String dateOfBirth = scanner.next();
 
-			Customer customer = new Customer(code, name, LocalDate.parse(dateOfBirth));
-			repository.saveCustomer(customer);
+			interactor.registerCustomer(name, code, dateOfBirth);
 		} else {
 			System.out.println("Enter video title to register: ");
 			String title = scanner.next();
@@ -203,16 +127,7 @@ public class CmdUI {
 			System.out.println("Enter video rating( 1 for 12, 2 for 15, 3 for 18 ):");
 			int videoRating = scanner.nextInt();
 			
-			LocalDate registeredDate = LocalDate.now();
-			Rating rating;
-			if (videoRating == 1) rating = Rating.TWELVE;
-			else if (videoRating == 2) rating = Rating.FIFTEEN;
-			else if (videoRating == 3) rating = Rating.EIGHTEEN;
-			else throw new IllegalArgumentException("No such rating " + videoRating);
-			
-			Video video = new Video(title, videoType, priceCode, rating, registeredDate);
-
-			repository.saveVideo(video);
+			interactor.registerVideo(title, videoType, priceCode, videoRating);
 		}
 	}
 
