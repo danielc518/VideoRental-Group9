@@ -240,6 +240,17 @@ public class GraphicUI extends JFrame {
 
 	private void registerVideo() {
 		String title = titleField.getText().toString();
+		
+		int videoType = getVideoType();
+
+		int priceCode = getPriceCode();
+
+		int videoRating = getVideoRating();
+		
+		interactor.registerVideo(title, videoType, priceCode, videoRating);
+	}
+
+	private int getVideoType() {
 		String videoTypeString = videoTypeSpinner.getValue().toString();
 		int videoType;
 		if (videoTypeString.equals("Regular"))
@@ -248,12 +259,7 @@ public class GraphicUI extends JFrame {
 			videoType = 2;
 		else // Children
 			videoType = 3;
-
-		int priceCode = getPriceCode();
-
-		int videoRating = getVideoRating();
-		
-		interactor.registerVideo(title, videoType, priceCode, videoRating);
+		return videoType;
 	}
 
 	private void makeButton(String title, ActionListener listener, int x, int y, int w, int h) {
